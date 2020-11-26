@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         scanf("%d", &seletor);
         switch (seletor) {
             case 1:
-                if (n_dicionarios < 4) {
+                if (n_dicionarios < 3) {
                     dicionarios[n_dicionarios] = avl_criar();
                     dicionarios[n_dicionarios]->id = n_dicionarios + 1;
                     scanf("%d", &n_palavras);
