@@ -11,8 +11,8 @@ typedef struct _dicionario
 
 int main(int argc, char *argv[])
 {
-    int seletor, n_palavras, n_dicionarios = 0, i, j, seletor_atualizacao, seletor_id, indice_dicionario;
-    char* chave;
+    int seletor, n_palavras, n_dicionarios = 0, i, j, seletor_atualizacao, indice_dicionario;
+    char chave[20], char_flag[20];
     ITEM palavra;
     Boolean flag;
     DICIONARIO *dicionarios[3];
@@ -43,18 +43,26 @@ int main(int argc, char *argv[])
                 printf("IMPOSSIVEL CRIAR\n");
                 break;
             case 2:
-                scanf("%d %d %s", &seletor_id, &seletor_atualizacao, chave);
-                indice_dicionario = seletor_id -1;
+                scanf("%d", &indice_dicionario);
+                --indice_dicionario;
                 if (dicionarios[indice_dicionario] != NULL) {
-                    if (seletor_atualizacao == 0) {
-                        avl_remover(dicionarios[indice_dicionario]->avl, chave);
-                        printf("%s EXCLUIDA DE %d\n", chave, dicionarios[indice_dicionario]->id);
-                        /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER REMOVIDA INEXISTENTE'*/
-                        break;
+                    scanf("%s", char_flag);
+                    while (strcmp(char_flag, "#") != 0) {
+                        scanf("%s", palavra);
+                        seletor_atualizacao = atoi(char_flag);
+                        if (seletor_atualizacao == 0) {
+                            avl_remover(dicionarios[indice_dicionario]->avl, chave);
+                            printf("%s EXCLUIDA DE %d\n", chave, dicionarios[indice_dicionario]->id);
+                            /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER REMOVIDA
+                             * INEXISTENTE'*/
+                        } else {
+                            avl_inserir(dicionarios[indice_dicionario]->avl, chave);
+                            printf("%s INSERIDA EM %d\n", chave, dicionarios[indice_dicionario]->id);
+                            /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER INSERIDA JA
+                             * EXISTENTE EM DICIONARIO'*/
+                        }
+                        scanf("%s", char_flag);
                     }
-                    avl_inserir(dicionarios[indice_dicionario]->avl, chave);
-                    printf("%s INSERIDA EM %d\n", chave, dicionarios[indice_dicionario]->id);
-                    /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER INSERIDA JA EXISTENTE EM DICIONARIO'*/
                     break;
                 }
                 printf("DICIONARIO %d INEXISTENTE\n", indice_dicionario + 1);
