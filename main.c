@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     int seletor, n_palavras, n_dicionarios = 0, i, j, seletor_atualizacao, indice_dicionario;
     char chave[20], char_flag[20];
     ITEM palavra;
-    Boolean flag;
+    Boolean flag, funcionou;
     DICIONARIO *dicionarios[3];
 
     for (i = 0; i < 3; ++i) {
@@ -51,15 +51,11 @@ int main(int argc, char *argv[])
                         scanf("%s", palavra);
                         seletor_atualizacao = atoi(char_flag);
                         if (seletor_atualizacao == 0) {
-                            avl_remover(dicionarios[indice_dicionario]->avl, chave);
-                            printf("%s EXCLUIDA DE %d\n", chave, dicionarios[indice_dicionario]->id);
-                            /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER REMOVIDA
-                             * INEXISTENTE'*/
+                            funcionou = avl_remover(dicionarios[indice_dicionario]->avl, chave);
+                            printf(funcionou? "%s EXCLUIDA DE %d\n" : "%s INEXISTENTE EM %d", chave, dicionarios[indice_dicionario]->id);
                         } else {
-                            avl_inserir(dicionarios[indice_dicionario]->avl, chave);
-                            printf("%s INSERIDA EM %d\n", chave, dicionarios[indice_dicionario]->id);
-                            /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER INSERIDA JA
-                             * EXISTENTE EM DICIONARIO'*/
+                            funcionou = avl_inserir(dicionarios[indice_dicionario]->avl, chave);
+                            printf(funcionou? "%s INSERIDA EM %d\n" : "%s JA EXISTE EM %d", chave, dicionarios[indice_dicionario]->id);
                         }
                         scanf("%s", char_flag);
                     }
