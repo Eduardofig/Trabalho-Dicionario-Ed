@@ -11,7 +11,8 @@ typedef struct _dicionario
 
 int main(int argc, char *argv[])
 {
-    int seletor, n_palavras, n_dicionarios = 0, i, j;
+    int seletor, n_palavras, n_dicionarios = 0, i, j, seletor_atualizacao, seletor_id, indice_dicionario;
+    char* chave;
     ITEM palavra;
     Boolean flag;
     DICIONARIO *dicionarios[3];
@@ -32,13 +33,31 @@ int main(int argc, char *argv[])
                         scanf("%d", &n_palavras);
                         for (j = 0; j < n_palavras; ++j) {
                             scanf("%s", palavra);
-                            printf("%d\n", avl_inserir(dicionarios[i]->avl, palavra));
+                            avl_inserir(dicionarios[i]->avl, palavra);
+                            /*PALAVRAS REPETIDAS DEVEM SER IGNORADAS, TRATAR ESSA EXCESSAO NO TAD*/
                         }
                         printf("DICIONARIO %d CRIADO\n", dicionarios[i]->id);
                         break;
                     }
                 }
                 printf("IMPOSSIVEL CRIAR\n");
+                break;
+            case 2:
+                scanf("%d %d %s", &seletor_id, &seletor_atualizacao, chave);
+                indice_dicionario = seletor_id -1;
+                if (dicionarios[indice_dicionario] != NULL) {
+                    if (seletor_atualizacao == 0) {
+                        avl_remover(dicionarios[indice_dicionario]->avl, chave);
+                        printf("%s EXCLUIDA DE %d\n", chave, dicionarios[indice_dicionario]->id);
+                        /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER REMOVIDA INEXISTENTE'*/
+                        break;
+                    }
+                    avl_inserir(dicionarios[indice_dicionario]->avl, chave);
+                    printf("%s INSERIDA EM %d\n", chave, dicionarios[indice_dicionario]->id);
+                    /*FALTA TRATAMENTO DE EXCESSAO DE 'PALAVRA A SER INSERIDA JA EXISTENTE EM DICIONARIO'*/
+                    break;
+                }
+                printf("DICIONARIO %d INEXISTENTE\n", indice_dicionario + 1);
                 break;
             default:
                 flag = FALSE;
