@@ -11,10 +11,10 @@ typedef struct _dicionario
 
 int main(int argc, char *argv[])
 {
-    int seletor, n_palavras, n_dicionarios = 0, i, j, seletor_atualizacao, indice_dicionario;
+    int seletor, n_palavras, i, j, seletor_atualizacao, indice_dicionario;
     char chave[20], char_flag[20];
     ITEM palavra;
-    Boolean flag, funcionou;
+    Boolean flag = TRUE, funcionou;
     DICIONARIO *dicionarios[3];
 
     for (i = 0; i < 3; ++i) {
@@ -25,22 +25,23 @@ int main(int argc, char *argv[])
         scanf("%d", &seletor);
         switch (seletor) {
             case 1:
+                scanf("%d", &n_palavras);
+                funcionou = FALSE;
                 for (i = 0; i < 3; ++i) {
                     if (dicionarios[i] == NULL) {
                         dicionarios[i] = (DICIONARIO*) malloc(sizeof(DICIONARIO));
                         dicionarios[i]->avl = avl_criar();
                         dicionarios[i]->id = i + 1;
-                        scanf("%d", &n_palavras);
                         for (j = 0; j < n_palavras; ++j) {
                             scanf("%s", palavra);
                             avl_inserir(dicionarios[i]->avl, palavra);
                             /*PALAVRAS REPETIDAS DEVEM SER IGNORADAS, TRATAR ESSA EXCESSAO NO TAD*/
                         }
-                        printf("DICIONARIO %d CRIADO\n", dicionarios[i]->id);
+                        funcionou = TRUE;
                         break;
                     }
                 }
-                printf("IMPOSSIVEL CRIAR\n");
+                funcionou? printf("DICIONARIO %d CRIADO\n", dicionarios[i]->id): printf("IMPOSSIVEL CRIAR\n");
                 break;
             case 2:
                 scanf("%d", &indice_dicionario);
