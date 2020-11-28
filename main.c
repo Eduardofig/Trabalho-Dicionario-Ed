@@ -64,6 +64,18 @@ int main(int argc, char *argv[])
                 }
                 printf("DICIONARIO %d INEXISTENTE\n", indice_dicionario + 1);
                 break;
+            case 3:
+                funcionou = FALSE;
+                scanf("%d", &indice_dicionario);
+                --indice_dicionario;
+                if (dicionarios[indice_dicionario] != NULL) {
+                    avl_apagar(dicionarios[indice_dicionario]->avl);
+                    free(dicionarios[indice_dicionario]);
+                    dicionarios[indice_dicionario] = NULL;
+                    funcionou = TRUE;
+                }
+                printf(funcionou? "DICIONARIO %d APAGADO\n" : "DICIONARIO %d INEXISTENTE", indice_dicionario + 1);
+                break;
             default:
                 flag = FALSE;
                 break;
