@@ -9,13 +9,55 @@ typedef struct _dicionario
     AVL* avl;
 }DICIONARIO;
 
+typedef struct _recorrentes{
+    ITEM palavra;
+    int recorrencias;
+}RECORRENTES;
+
+typedef struct _arrayRecorrentes{
+  RECORRENTES *array;
+  size_t usado;
+  size_t tamanho;
+} ARRAY_RECORRENTES;
+
+void initArray(ARRAY_RECORRENTES *a, size_t tamanho_inicial) {
+  a->array = malloc(tamanho_inicial * sizeof(RECORRENTES));
+  a->usado = 0;
+  a->tamanho = tamanho_inicial;
+}
+
+void insertArray(ARRAY_RECORRENTES *a, RECORRENTES elemento) {
+  // a->used is the number of used entries, because a->array[a->used++] updates a->used only *after* the array has been accessed.
+  // Therefore a->used can go up to a->size
+  if (a->usado == a->tamanho) {
+    a->tamanho *= 2;
+    a->array = realloc(a->array, a->tamanho * sizeof(RECORRENTES));
+  }
+  a->array[a->usado++] = elemento;
+}
+
+void freeArray(ARRAY_RECORRENTES *a) {
+  free(a->array);
+  a->array = NULL;
+  a->usado = a->tamanho = 0;
+}
+
+int comparador_recorrentes(const void *a, const void *b)
+{
+  RECORRENTES *recorrente_a = (RECORRENTES *)a;
+  RECORRENTES *recorrente_b = (RECORRENTES *)b;
+  return (recorrente_a->recorrencias - recorrente_b->recorrencias);
+}
+
 int main(int argc, char *argv[])
 {
-    int seletor, i, seletor_atualizacao, indice_dicionario;
-    char chave[20], char_flag[20];
-    ITEM palavra;
+    int seletor, i, seletor_atualizacao, indice_dicionario, n_palavras, n_palavras_recorrentes;
+    ITEM chave, char_flag, palavra, *recorrencia;
     Boolean flag = TRUE, funcionou;
     DICIONARIO *dicionarios[3];
+    RECORRENTES recorrentes;
+    ARRAY_RECORRENTES *array_recorrentes;
+
 
     for (i = 0; i < 3; ++i) {
         dicionarios[i] = NULL;
@@ -76,6 +118,35 @@ int main(int argc, char *argv[])
                 }
                 printf(funcionou? "DICIONARIO %d APAGADO\n" : "DICIONARIO %d INEXISTENTE", indice_dicionario + 1);
                 break;
+            case 4:
+                scanf("%d %d %d", &indice_dicionario, &n_palavras, &n_palavras_recorrentes);
+                --indice_dicionario;
+                if (dicionarios[indice_dicionario] == NULL) {
+                    initArray(array_recorrentes, 1);
+                    scanf("%s", recorrentes.palavra);
+                    i = 0;
+                    while (strcmp(palavra, "#")) {
+                        funcionou = FALSE;
+                        recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, palavra);
+                        if (strcmp(recorrentes.palavra, ERRO_STRING)) {
+                            for (i = 0; i < array_recorrentes->usado; ++i) {
+                                if (recorrentes.palavra == array_recorrentes->array[i].palavra) {
+                                    insertArray(array_recorrentes, recorrentes);
+                                    funcionou = TRUE;
+                                    break;
+                                }
+                            }
+                            if (funcionou) {
+                                ++array_recorrentes->array[i].recorrencias;
+                            }
+                        }
+                        scanf("%s", recorrentes.palavra);
+                    }
+                }
+                qsort(array_recorrentes->array,array_recorrentes->usado, sizeof(RECORRENTES), comparador_recorrentes);
+                for (i = 0; i < n_palavras_recorrentes; ++i) {
+                    printf("%s %d\n", array_recorrentes->array->palavra, array_recorrentes->array->recorrencias);
+                }
             default:
                 flag = FALSE;
                 break;

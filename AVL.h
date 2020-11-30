@@ -12,6 +12,7 @@
 #define TRUE 1
 #define FALSE 0
 #define ERRO -32000
+#define ERRO_STRING "ERROR 47389204710378 abcdefg"
 #define MAX 46
 
 typedef struct NO *AVL;
