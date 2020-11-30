@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 {
     int seletor, i, seletor_atualizacao, indice_dicionario, n_palavras, n_palavras_recorrentes;
     ITEM chave, char_flag, palavra, *recorrencia;
-    Boolean flag = TRUE, funcionou;
+    Boolean flag = TRUE, funcionou, existe;
     DICIONARIO *dicionarios[3];
     RECORRENTES recorrentes;
     ARRAY_RECORRENTES *array_recorrentes;
@@ -119,26 +119,28 @@ int main(int argc, char *argv[])
                 printf(funcionou? "DICIONARIO %d APAGADO\n" : "DICIONARIO %d INEXISTENTE", indice_dicionario + 1);
                 break;
             case 4:
-                scanf("%d %d %d", &indice_dicionario, &n_palavras, &n_palavras_recorrentes);
+                scanf("%d %d", &indice_dicionario,&n_palavras_recorrentes);
                 --indice_dicionario;
-                if (dicionarios[indice_dicionario] == NULL) {
+                funcionou = FALSE;
+                if (dicionarios[indice_dicionario] != NULL) {
                     initArray(array_recorrentes, 1);
                     scanf("%s", recorrentes.palavra);
-                    i = 0;
-                    while (strcmp(recorrentes.palavra, "#")) {
-                        funcionou = FALSE;
-                        recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, palavra);
-                        if (strcmp(recorrentes.palavra, ERRO_STRING)) {
+                    while (strcmp(recorrentes.palavra, "#") != 0) {
+                        existe = FALSE;
+                        recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, recorrentes.palavra);
+                        if (strcmp(recorrentes.palavra, ERRO_STRING) != 0) {
                             for (i = 0; i < array_recorrentes->usado; ++i) {
-                                if (recorrentes.palavra == array_recorrentes->array[i].palavra) {
-                                    insertArray(array_recorrentes, recorrentes);
-                                    funcionou = TRUE;
+                                if (strcmp(recorrentes.palavra, array_recorrentes->array[i].palavra) == 0) {
+                                    ++array_recorrentes->array[i].recorrencias;
+                                    existe = TRUE;
                                     break;
                                 }
                             }
-                            if (funcionou) {
-                                ++array_recorrentes->array[i].recorrencias;
+                            if (!existe) {
+                                insertArray(array_recorrentes, recorrentes);
                             }
+                        } else {
+                            /*Faltam 3 tratamentos de excessao*/
                         }
                         scanf("%s", recorrentes.palavra);
                     }
@@ -147,6 +149,8 @@ int main(int argc, char *argv[])
                 for (i = 0; i < n_palavras_recorrentes; ++i) {
                     printf("%s %d\n", array_recorrentes->array->palavra, array_recorrentes->array->recorrencias);
                 }
+                freeArray(array_recorrentes);
+                break;
             default:
                 flag = FALSE;
                 break;
