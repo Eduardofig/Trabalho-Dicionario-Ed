@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
                     initArray(array_recorrentes, 1);
                     scanf("%s", recorrentes.palavra);
                     i = 0;
-                    while (strcmp(palavra, "#")) {
+                    while (strcmp(recorrentes.palavra, "#")) {
                         funcionou = FALSE;
                         recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, palavra);
                         if (strcmp(recorrentes.palavra, ERRO_STRING)) {
