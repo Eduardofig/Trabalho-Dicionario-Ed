@@ -9,51 +9,56 @@ typedef struct _dicionario
     AVL* avl;
 }DICIONARIO;
 
-typedef struct _recorrentes{
+typedef struct _recorrentes
+{
     ITEM palavra;
     int recorrencias;
 }RECORRENTES;
 
-typedef struct _arrayRecorrentes{
-  RECORRENTES *array;
-  size_t usado;
-  size_t tamanho;
+typedef struct _arrayRecorrentes
+{
+    RECORRENTES *array;
+    int usado;
+    size_t tamanho;
 } ARRAY_RECORRENTES;
 
-void initArray(ARRAY_RECORRENTES *a, size_t tamanho_inicial) {
-  a->array = malloc(tamanho_inicial * sizeof(RECORRENTES));
-  a->usado = 0;
-  a->tamanho = tamanho_inicial;
+void initArray(ARRAY_RECORRENTES *a, size_t tamanho_inicial)
+{
+    a->array = malloc(tamanho_inicial * sizeof(RECORRENTES));
+    a->usado = 0;
+    a->tamanho = tamanho_inicial;
 }
 
-void insertArray(ARRAY_RECORRENTES *a, RECORRENTES elemento) {
-  // a->used is the number of used entries, because a->array[a->used++] updates a->used only *after* the array has been accessed.
-  // Therefore a->used can go up to a->size
-  if (a->usado == a->tamanho) {
-    a->tamanho *= 2;
-    a->array = realloc(a->array, a->tamanho * sizeof(RECORRENTES));
-  }
-  a->array[a->usado++] = elemento;
+void insertArray(ARRAY_RECORRENTES *a, RECORRENTES elemento)
+{
+    // a->used is the number of used entries, because a->array[a->used++] updates a->used only *after* the array has been accessed.
+    // Therefore a->used can go up to a->size
+    if (a->usado == a->tamanho) {
+        a->tamanho *= 2;
+        a->array = realloc(a->array, a->tamanho * sizeof(RECORRENTES));
+    }
+    a->array[a->usado++] = elemento;
 }
 
-void freeArray(ARRAY_RECORRENTES *a) {
-  free(a->array);
-  a->array = NULL;
-  a->usado = a->tamanho = 0;
+void freeArray(ARRAY_RECORRENTES *a)
+{
+    free(a->array);
+    a->array = NULL;
+    a->usado = a->tamanho = 0;
 }
 
 int comparador_recorrentes(const void *a, const void *b)
 {
-  RECORRENTES *recorrente_a = (RECORRENTES *)a;
-  RECORRENTES *recorrente_b = (RECORRENTES *)b;
-  return (recorrente_a->recorrencias - recorrente_b->recorrencias);
+    RECORRENTES *recorrente_a = (RECORRENTES *)a;
+    RECORRENTES *recorrente_b = (RECORRENTES *)b;
+    return (recorrente_a->recorrencias - recorrente_b->recorrencias);
 }
 
 int main(int argc, char *argv[])
 {
     int seletor, i, seletor_atualizacao, indice_dicionario, n_palavras, n_palavras_recorrentes;
     ITEM chave, char_flag, palavra, *recorrencia;
-    Boolean flag = TRUE, funcionou, existe;
+    Boolean flag = TRUE, funcionou, ja_inserido;
     DICIONARIO *dicionarios[3];
     RECORRENTES recorrentes;
     ARRAY_RECORRENTES *array_recorrentes;
@@ -123,24 +128,25 @@ int main(int argc, char *argv[])
                 --indice_dicionario;
                 funcionou = FALSE;
                 if (dicionarios[indice_dicionario] != NULL) {
-                    initArray(array_recorrentes, 1);
+                    funcionou = TRUE;
+                    initArray(array_recorrentes, sizeof(RECORRENTES));/*DOUBLE CHECK*/
                     scanf("%s", recorrentes.palavra);
                     while (strcmp(recorrentes.palavra, "#") != 0) {
-                        existe = FALSE;
+                        ja_inserido = FALSE;
                         recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, recorrentes.palavra);
                         if (strcmp(recorrentes.palavra, ERRO_STRING) != 0) {
                             for (i = 0; i < array_recorrentes->usado; ++i) {
                                 if (strcmp(recorrentes.palavra, array_recorrentes->array[i].palavra) == 0) {
                                     ++array_recorrentes->array[i].recorrencias;
-                                    existe = TRUE;
+                                    ja_inserido = TRUE;
                                     break;
                                 }
                             }
-                            if (!existe) {
+                            if (!ja_inserido) {
                                 insertArray(array_recorrentes, recorrentes);
                             }
                         } else {
-                            /*Faltam 3 tratamentos de excessao*/
+                            printf("%s\n", recorrentes.palavra);
                         }
                         scanf("%s", recorrentes.palavra);
                     }

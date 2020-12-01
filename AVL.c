@@ -45,7 +45,7 @@ int altura_NO(AVL no){
     if(no == NULL)
         return -1;
     else
-    return no->altura;
+        return no->altura;
 }
 
 int fatorBalanceamento_NO(AVL no){
@@ -157,12 +157,12 @@ AVL procuraMenor(AVL atual){
 
 Boolean avl_remover(AVL *T, char *chave){
     if(*T == NULL){// chave nao existe
-	    return ERRO;
-	}
+        return ERRO;
+    }
 
     int res;
-	if(strcmp(chave, (*T)->info) < 0){
-	    if((res = avl_remover(&(*T)->esq, chave)) == 1){
+    if(strcmp(chave, (*T)->info) < 0){
+        if((res = avl_remover(&(*T)->esq, chave)) == 1){
             //Verificando se é necessário realzar rotacoes
             if(fatorBalanceamento_NO(*T) >= 2){
                 //Verificando se a rotacao é unica
@@ -171,11 +171,11 @@ Boolean avl_remover(AVL *T, char *chave){
                 else
                     RotacaoDuplaDirEsq(T);
             }
-	    }
-	}
+        }
+    }
 
-	if(strcmp((*T)->info, chave) < 0){
-	    if((res = avl_remover(&(*T)->dir, chave)) == 1){
+    if(strcmp((*T)->info, chave) < 0){
+        if((res = avl_remover(&(*T)->dir, chave)) == 1){
             //Verificando se é necessário realzar rotacoes
             if(fatorBalanceamento_NO(*T) >= 2){
                 //Verificando se a rotacao é unica
@@ -184,39 +184,39 @@ Boolean avl_remover(AVL *T, char *chave){
                 else
                     RotacaoDuplaEsqDir(T);
             }
-	    }
-	}
+        }
+    }
 
-	if((*T)->info == chave){
-	    if(((*T)->esq == NULL || (*T)->dir == NULL)){// tem 1 filho ou nenhum
-			AVL aux = (*T);
-			if((*T)->esq != NULL)
+    if((*T)->info == chave){
+        if(((*T)->esq == NULL || (*T)->dir == NULL)){// tem 1 filho ou nenhum
+            AVL aux = (*T);
+            if((*T)->esq != NULL)
                 *T = (*T)->esq;
             else
                 *T = (*T)->dir;
-			free(aux);
-		}else { // tem 2 filhos
-			AVL temp = procuraMenor((*T)->dir);
+            free(aux);
+        }else { // tem 2 filhos
+            AVL temp = procuraMenor((*T)->dir);
             strcpy((*T)->info, temp->info);
-			avl_remover(&(*T)->dir, (*T)->info);
-            
+            avl_remover(&(*T)->dir, (*T)->info);
+
             //Verificando se é necessário realzar rotacoes
             if(fatorBalanceamento_NO(*T) >= 2){
                 //Verificando se a rotacao é unica
-				if(altura_NO((*T)->esq->dir) <= altura_NO((*T)->esq->esq))
-					RotacaoEsq(T);
-				else
-					RotacaoDuplaEsqDir(T);
-			}
-		}
-		if (*T != NULL)
+                if(altura_NO((*T)->esq->dir) <= altura_NO((*T)->esq->esq))
+                    RotacaoEsq(T);
+                else
+                    RotacaoDuplaEsqDir(T);
+            }
+        }
+        if (*T != NULL)
             (*T)->altura = maior(altura_NO((*T)->esq),altura_NO((*T)->dir)) + 1;
-		return TRUE;
-	}
+        return TRUE;
+    }
 
-	(*T)->altura = maior(altura_NO((*T)->esq),altura_NO((*T)->dir)) + 1;
+    (*T)->altura = maior(altura_NO((*T)->esq),altura_NO((*T)->dir)) + 1;
 
-	return res;
+    return res;
 }
 
 ITEM* avl_buscar(AVL *T, char *chave){
