@@ -74,12 +74,15 @@ int main(int argc, char *argv[])
             case 1:
                 funcionou = FALSE;
                 for (i = 0; i < 3; ++i) {
+                    /*Itera pelo array de dicionarios ate achar um que ainda nao foi alocado*/
                     if (dicionarios[i] == NULL) {
+                        /*Alocacao do dicionario*/
                         dicionarios[i] = (DICIONARIO*) malloc(sizeof(DICIONARIO));
                         dicionarios[i]->avl = avl_criar();
                         dicionarios[i]->id = i + 1;
+                        /*Insercao das palavras*/
                         scanf("%s", palavra);
-                        while (strcmp(palavra, "#")) {
+                        while (strcmp(palavra, "#") != 0) {
                             avl_inserir(dicionarios[i]->avl, palavra);
                             /*PALAVRAS REPETIDAS DEVEM SER IGNORADAS, TRATAR ESSA EXCESSAO NO TAD*/
                             scanf("%s", palavra);
@@ -99,9 +102,11 @@ int main(int argc, char *argv[])
                         scanf("%s", palavra);
                         seletor_atualizacao = atoi(char_flag);
                         if (seletor_atualizacao == 0) {
+                            /*Remocao de palavra do dicionario*/
                             funcionou = avl_remover(dicionarios[indice_dicionario]->avl, chave);
                             printf(funcionou? "%s EXCLUIDA DE %d\n" : "%s INEXISTENTE EM %d", chave, dicionarios[indice_dicionario]->id);
                         } else {
+                            /*Insercao de palavra no dicionario*/
                             funcionou = avl_inserir(dicionarios[indice_dicionario]->avl, chave);
                             printf(funcionou? "%s INSERIDA EM %d\n" : "%s JA EXISTE EM %d", chave, dicionarios[indice_dicionario]->id);
                         }
@@ -116,6 +121,7 @@ int main(int argc, char *argv[])
                 scanf("%d", &indice_dicionario);
                 --indice_dicionario;
                 if (dicionarios[indice_dicionario] != NULL) {
+                    /*Desalocacao do dicionario*/
                     avl_apagar(dicionarios[indice_dicionario]->avl);
                     free(dicionarios[indice_dicionario]);
                     dicionarios[indice_dicionario] = NULL;
@@ -133,6 +139,7 @@ int main(int argc, char *argv[])
                     scanf("%s", recorrentes.palavra);
                     while (strcmp(recorrentes.palavra, "#") != 0) {
                         ja_inserido = FALSE;
+                        /*Busca da palavra no dicionario, caso ache entra no if*/
                         recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, recorrentes.palavra);
                         if (strcmp(recorrentes.palavra, ERRO_STRING) != 0) {
                             for (i = 0; i < array_recorrentes->usado; ++i) {
@@ -146,6 +153,7 @@ int main(int argc, char *argv[])
                                 insertArray(array_recorrentes, recorrentes);
                             }
                         } else {
+                            /*Caso nao ache, imprime a palavra*/
                             printf("%s\n", recorrentes.palavra);
                         }
                         scanf("%s", recorrentes.palavra);
