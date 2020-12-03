@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "AVL.h"
+#include "AVLrec.h"
 
 typedef struct _dicionario
 {
@@ -9,60 +10,23 @@ typedef struct _dicionario
     AVL* avl;
 }DICIONARIO;
 
-typedef struct _recorrentes
-{
-    ITEM palavra;
-    int recorrencias;
-}RECORRENTES;
-
-typedef struct _arrayRecorrentes
-{
-    RECORRENTES *array;
-    int usado;
-    size_t tamanho;
-} ARRAY_RECORRENTES;
-
-void initArray(ARRAY_RECORRENTES *a, size_t tamanho_inicial)
-{
-    a->array = malloc(tamanho_inicial * sizeof(RECORRENTES));
-    a->usado = 0;
-    a->tamanho = tamanho_inicial;
-}
-
-void insertArray(ARRAY_RECORRENTES *a, RECORRENTES elemento)
-{
-    // a->used is the number of used entries, because a->array[a->used++] updates a->used only *after* the array has been accessed.
-    // Therefore a->used can go up to a->size
-    if (a->usado == a->tamanho) {
-        a->tamanho *= 2;
-        a->array = realloc(a->array, a->tamanho * sizeof(RECORRENTES));
-    }
-    a->array[a->usado++] = elemento;
-}
-
-void freeArray(ARRAY_RECORRENTES *a)
-{
-    free(a->array);
-    a->array = NULL;
-    a->usado = a->tamanho = 0;
-}
-
 int comparador_recorrentes(const void *a, const void *b)
 {
-    RECORRENTES *recorrente_a = (RECORRENTES *)a;
-    RECORRENTES *recorrente_b = (RECORRENTES *)b;
-    return (recorrente_a->recorrencias - recorrente_b->recorrencias);
+    ITEMREC *recorrente_a = (ITEMREC *)a;
+    ITEMREC *recorrente_b = (ITEMREC *)b;
+    int diferenca = recorrente_a->recorrencia - recorrente_b->recorrencia;
+    return diferenca == 0? strcmp(recorrente_a->palavra, recorrente_b->palavra) : diferenca; /*DOUBLE CHECK*/
 }
 
 int main(int argc, char *argv[])
 {
-    int seletor, i, seletor_atualizacao, indice_dicionario,n_palavras_recorrentes;
+    int seletor, i, seletor_atualizacao, indice_dicionario,n_palavras_recorrentes, tamanho_arr_recorrentes;
     ITEM chave, char_flag, palavra, *recorrencia;
-    Boolean flag = TRUE, funcionou, ja_inserido;
+    Boolean flag = TRUE, funcionou;
     DICIONARIO *dicionarios[3];
-    RECORRENTES recorrentes;
-    ARRAY_RECORRENTES *array_recorrentes;
-
+    ITEMREC recorrentes, *recorrentes_aux;
+    ITEMREC *array_recorrentes;
+    AVLREC *AVLrec;
 
     for (i = 0; i < 3; ++i) {
         dicionarios[i] = NULL;
@@ -132,25 +96,18 @@ int main(int argc, char *argv[])
             case 4:
                 scanf("%d %d", &indice_dicionario,&n_palavras_recorrentes);
                 --indice_dicionario;
-                funcionou = FALSE;
                 if (dicionarios[indice_dicionario] != NULL) {
-                    funcionou = TRUE;
-                    initArray(array_recorrentes, sizeof(RECORRENTES));/*DOUBLE CHECK*/
+                    AVLrec = avlrec_criar();
                     scanf("%s", recorrentes.palavra);
-                    while (strcmp(recorrentes.palavra, "#") != 0) {
-                        ja_inserido = FALSE;
+                    while (strcmp(recorrentes.palavra, "#") != 0) {;
                         /*Busca da palavra no dicionario, caso ache entra no if*/
                         recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, recorrentes.palavra);
-                        if (strcmp(recorrentes.palavra, ERRO_STRING) != 0) {
-                            for (i = 0; i < array_recorrentes->usado; ++i) {
-                                if (strcmp(recorrentes.palavra, array_recorrentes->array[i].palavra) == 0) {
-                                    ++array_recorrentes->array[i].recorrencias;
-                                    ja_inserido = TRUE;
-                                    break;
-                                }
-                            }
-                            if (!ja_inserido) {
-                                insertArray(array_recorrentes, recorrentes);
+                        if (strcmp(*recorrencia, ERRO_STRING) != 0) {
+                            recorrentes_aux = avlrec_buscar(AVLrec, recorrentes.palavra);
+                            if (strcmp(recorrentes_aux->palavra, ERRO_STRING) != 0) {
+                                ++recorrentes_aux->recorrencia;
+                            } else {
+                                avlrec_inserir(AVLrec, recorrentes.palavra);
                             }
                         } else {
                             /*Caso nao ache, imprime a palavra*/
@@ -158,18 +115,22 @@ int main(int argc, char *argv[])
                         }
                         scanf("%s", recorrentes.palavra);
                     }
+                    array_recorrentes = avlrec_toarray(AVLrec, &tamanho_arr_recorrentes);
+                    qsort(array_recorrentes, tamanho_arr_recorrentes, sizeof(ITEMREC), comparador_recorrentes);
+                    for (i = 0; i < (n_palavras_recorrentes > tamanho_arr_recorrentes? tamanho_arr_recorrentes : n_palavras_recorrentes); ++i) {
+                        printf("%s %d\n", array_recorrentes[i].palavra, array_recorrentes[i].recorrencia);
+                    }
+                    free(array_recorrentes);
+                    avlrec_apagar(AVLrec);
+                    AVLrec = NULL;
+                    break;
                 }
-                qsort(array_recorrentes->array,array_recorrentes->usado, sizeof(RECORRENTES), comparador_recorrentes);
-                for (i = 0; i < n_palavras_recorrentes; ++i) {
-                    printf("%s %d\n", array_recorrentes->array->palavra, array_recorrentes->array->recorrencias);
-                }
-                freeArray(array_recorrentes);
+                printf("DICIONARIO %d INEXISTENTE\n", indice_dicionario + 1);
                 break;
             default:
                 flag = FALSE;
                 break;
         }
     }
-
     return 0;
 }
