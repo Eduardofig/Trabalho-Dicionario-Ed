@@ -56,7 +56,7 @@ int comparador_recorrentes(const void *a, const void *b)
 
 int main(int argc, char *argv[])
 {
-    int seletor, i, seletor_atualizacao, indice_dicionario, n_palavras, n_palavras_recorrentes;
+    int seletor, i, seletor_atualizacao, indice_dicionario,n_palavras_recorrentes;
     ITEM chave, char_flag, palavra, *recorrencia;
     Boolean flag = TRUE, funcionou, ja_inserido;
     DICIONARIO *dicionarios[3];
