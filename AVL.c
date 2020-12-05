@@ -238,3 +238,22 @@ ITEM* avl_buscar(AVL *T, char *chave){
 int avl_altura(AVL*T){
     return (*T)->altura;
 }
+
+void avl_imprimir_no(AVL no)
+{
+    if (no == NULL) {
+        return;
+    }
+    avl_imprimir_no(no->esq);
+    printf("%s\n", no->info);
+    avl_imprimir_no(no->dir);
+    return;
+}
+
+void avl_imprimir(AVL *T){
+    if (T == NULL) {
+        return;
+    }
+    avl_imprimir_no(*T);
+    return;
+}

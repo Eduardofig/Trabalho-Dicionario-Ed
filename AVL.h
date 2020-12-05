@@ -25,5 +25,6 @@ Boolean avl_inserir(AVL *T, ITEM item);
 Boolean avl_remover(AVL *T, char *chave);
 ITEM* avl_buscar(AVL *T, char *chave);
 int avl_altura(AVL*T);
+void avl_imprimir(AVL *T);
 
 #endif /* ifndef AVL_HEADER */

@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     DICIONARIO *dicionarios[3];
     ITEMREC *recorrentes_aux, *array_recorrentes;
     AVLREC *AVLrec;
+    AVL * AVLrejects;
 
     for (i = 0; i < 3; ++i) {
         dicionarios[i] = NULL;
@@ -112,6 +113,7 @@ int main(int argc, char *argv[])
                 --indice_dicionario;
                 if (dicionarios[indice_dicionario] != NULL) {
                     AVLrec = avlrec_criar();
+                    AVLrejects = avl_criar();
                     scanf("%s", palavra);
                     while (strcmp(palavra, "#") != 0) {
                         /*Busca da palavra no dicionario, caso ache entra no if*/
@@ -125,10 +127,11 @@ int main(int argc, char *argv[])
                             }
                         } else {
                             /*Caso nao ache, imprime a palavra*/
-                            printf("%s\n", palavra);
+                            avl_inserir(AVLrejects, palavra);
                         }
                         scanf("%s", palavra);
                     }
+                    avl_imprimir(AVLrejects);
                     array_recorrentes = avlrec_toarray(AVLrec, &tamanho_arr_recorrentes);
                     qsort(array_recorrentes, tamanho_arr_recorrentes, sizeof(ITEMREC), comparador_recorrentes);
                     for (i = 0; i < (n_palavras_recorrentes > tamanho_arr_recorrentes? tamanho_arr_recorrentes : n_palavras_recorrentes); ++i) {
@@ -136,6 +139,7 @@ int main(int argc, char *argv[])
                     }
                     free(array_recorrentes);
                     avlrec_apagar(AVLrec);
+                    avl_apagar(AVLrejects);
                     AVLrec = NULL;
                     break;
                 }

@@ -262,3 +262,21 @@ ITEMREC* avlrec_toarray(AVLREC *arvore, int *tam){
     (*tam) = avlrec_inserearray(*arvore, array, 0);
     return array;
 }
+
+void avlrec_imprimir_no(AVLREC no) {
+  if (no == NULL) {
+    return;
+  }
+  avlrec_imprimir_no(no->esq);
+  printf("%s %d\n", no->info.palavra, no->info.recorrencia);
+  avlrec_imprimir_no(no->dir);
+  return;
+}
+
+void avlrec_imprimir(AVLREC *T) {
+  if (T == NULL) {
+    return;
+  }
+  avlrec_imprimir_no(*T);
+  return;
+}

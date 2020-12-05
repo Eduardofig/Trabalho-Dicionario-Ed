@@ -29,5 +29,6 @@ Boolean avlrec_remover(AVLREC *T, char *chave);
 ITEMREC* avlrec_buscar(AVLREC *T, char *chave);
 int avlrec_altura(AVLREC*T);
 ITEMREC* avlrec_toarray(AVLREC *arvore, int *tam);
+void avlrec_imprimir(AVLREC *T);
 
 #endif /* ifndef AVLrec_HEADER */
