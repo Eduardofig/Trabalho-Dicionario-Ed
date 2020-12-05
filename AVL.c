@@ -221,7 +221,7 @@ Boolean avl_remover(AVL *T, char *chave){
 
 ITEM* avl_buscar(AVL *T, char *chave){
     if(T == NULL)
-        return FALSE;
+        return NULL;
     AVL atual = *T;
     while(atual != NULL){
         if(!strcmp(chave, atual->info)){
@@ -232,7 +232,7 @@ ITEM* avl_buscar(AVL *T, char *chave){
         else
             atual = atual->esq;
     }
-    return FALSE;
+    return NULL;
 }
 
 int avl_altura(AVL*T){

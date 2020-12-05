@@ -223,7 +223,7 @@ Boolean avlrec_remover(AVLREC *T, char *chave){
 
 ITEMREC* avlrec_buscar(AVLREC *T, char *chave){
     if(T == NULL)
-        return FALSE;
+        return NULL;
     AVLREC atual = *T;
     while(atual != NULL){
         if(!strcmp(chave, atual->info.palavra)){
@@ -234,7 +234,7 @@ ITEMREC* avlrec_buscar(AVLREC *T, char *chave){
         else
             atual = atual->esq;
     }
-    return FALSE;
+    return NULL;
 }
 
 int avlrec_altura(AVLREC*T){
@@ -244,7 +244,6 @@ int avlrec_altura(AVLREC*T){
 int avlrec_inserearray(AVLREC arvore, ITEMREC* array, int i){
     if (arvore == NULL) return i;
     i = avlrec_inserearray(arvore->esq, array, i);
-    printf("%d", i);
     array[i] = arvore->info;
     i = avlrec_inserearray(arvore->dir, array, i+1);
     return i;

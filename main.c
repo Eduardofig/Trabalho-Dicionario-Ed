@@ -14,7 +14,7 @@ int comparador_recorrentes(const void *a, const void *b)
 {
     ITEMREC *recorrente_a = (ITEMREC *)a;
     ITEMREC *recorrente_b = (ITEMREC *)b;
-    int diferenca = recorrente_a->recorrencia - recorrente_b->recorrencia;
+    int diferenca = recorrente_b->recorrencia - recorrente_a->recorrencia;
     return diferenca == 0? strcmp(recorrente_a->palavra, recorrente_b->palavra) : diferenca; /*DOUBLE CHECK*/
 }
 
@@ -76,11 +76,11 @@ int main(int argc, char *argv[])
                         if (seletor_atualizacao == 0) {
                             /*Remocao de palavra do dicionario*/
                             funcionou = avl_remover(dicionarios[indice_dicionario]->avl, palavra);
-                            printf(funcionou? "%s EXCLUIDA DE %d\n" : "%s INEXISTENTE EM %d", palavra, dicionarios[indice_dicionario]->id);
+                            printf(funcionou == TRUE? "%s EXCLUIDA DE %d\n" : "%s INEXISTENTE EM %d\n", palavra, dicionarios[indice_dicionario]->id);
                         } else {
                             /*Insercao de palavra no dicionario*/
                             funcionou = avl_inserir(dicionarios[indice_dicionario]->avl, palavra);
-                            printf(funcionou? "%s INSERIDA EM %d\n" : "%s JA EXISTE EM %d", palavra, dicionarios[indice_dicionario]->id);
+                            printf(funcionou == TRUE? "%s INSERIDA EM %d\n" : "%s JA EXISTE EM %d\n", palavra, dicionarios[indice_dicionario]->id);
                         }
                         scanf("%s", char_flag);
                     }
@@ -116,9 +116,9 @@ int main(int argc, char *argv[])
                     while (strcmp(palavra, "#") != 0) {
                         /*Busca da palavra no dicionario, caso ache entra no if*/
                         recorrencia = avl_buscar(dicionarios[indice_dicionario]->avl, palavra);
-                        if (strcmp(*recorrencia, ERRO_STRING) != 0) {
+                        if (recorrencia != NULL) {
                             recorrentes_aux = avlrec_buscar(AVLrec, palavra);
-                            if (strcmp(recorrentes_aux->palavra, ERRO_STRING) != 0) {
+                            if (recorrentes_aux != NULL) {
                                 ++recorrentes_aux->recorrencia;
                             } else {
                                 avlrec_inserir(AVLrec, palavra);
