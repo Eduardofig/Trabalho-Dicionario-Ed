@@ -152,6 +152,13 @@ int main(int argc, char *argv[])
                 break;
             default:
                 flag = FALSE;
+                for (i = 0; i < 3; ++i) {
+                    if (dicionarios[i] != NULL) {
+                        avl_apagar(dicionarios[i]->avl);
+                        free(dicionarios[i]);
+                        dicionarios[i] = NULL;
+                    }
+                }
                 break;
         }
     }
