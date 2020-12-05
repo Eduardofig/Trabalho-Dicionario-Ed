@@ -187,7 +187,7 @@ Boolean avl_remover(AVL *T, char *chave){
         }
     }
 
-    if(!strcmp(chave, (*T)->info)){
+    if(!strcmp((*T)->info, chave)){
         if(((*T)->esq == NULL || (*T)->dir == NULL)){// tem 1 filho ou nenhum
             AVL aux = (*T);
             if((*T)->esq != NULL)
