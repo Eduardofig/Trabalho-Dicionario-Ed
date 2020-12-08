@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
                     dicionarios[indice_dicionario] = NULL;
                     funcionou = TRUE;
                 }
-                printf(funcionou? "DICIONARIO %d APAGADO\n" : "DICIONARIO %d INEXISTENTE", indice_dicionario + 1);
+                printf(funcionou? "DICIONARIO %d APAGADO\n" : "DICIONARIO %d INEXISTENTE\n", indice_dicionario + 1);
                 break;
             case 4:
                 scanf("%d %d", &indice_dicionario,&n_palavras_recorrentes);
@@ -134,6 +134,15 @@ int main(int argc, char *argv[])
                     avl_imprimir(AVLrejects);
                     array_recorrentes = avlrec_toarray(AVLrec, &tamanho_arr_recorrentes);
                     qsort(array_recorrentes, tamanho_arr_recorrentes, sizeof(ITEMREC), comparador_recorrentes);
+                    if (n_palavras_recorrentes < 0) {
+                        /*Para n menor que zero*/
+                        printf("IMPOSSIVEL INFORMAR %d PALAVRAS MAIS FREQUENTES\n", n_palavras_recorrentes);
+                        free(array_recorrentes);
+                        avlrec_apagar(AVLrec);
+                        avl_apagar(AVLrejects);
+                        AVLrec = NULL;
+                        break;
+                    }
                     for (i = 0; i < (n_palavras_recorrentes > tamanho_arr_recorrentes? tamanho_arr_recorrentes : n_palavras_recorrentes); ++i) {
                         printf("%s %d\n", array_recorrentes[i].palavra, array_recorrentes[i].recorrencia);
                     }
