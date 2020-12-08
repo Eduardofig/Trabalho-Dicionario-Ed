@@ -105,8 +105,10 @@ int main(int argc, char *argv[])
                     free(dicionarios[indice_dicionario]);
                     dicionarios[indice_dicionario] = NULL;
                     funcionou = TRUE;
+                    printf("DICIONARIO %d APAGADO\n", indice_dicionario + 1);
+                    break;
                 }
-                printf(funcionou? "DICIONARIO %d APAGADO\n" : "DICIONARIO %d INEXISTENTE\n", indice_dicionario + 1);
+                printf("DICIONARIO %d INEXISTENTE\n", indice_dicionario + 1);
                 break;
             case 4:
                 scanf("%d %d", &indice_dicionario,&n_palavras_recorrentes);

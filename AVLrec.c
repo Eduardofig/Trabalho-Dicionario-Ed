@@ -251,6 +251,12 @@ int avlrec_inserearray(AVLREC arvore, ITEMREC* array, int i){
 
 ITEMREC* avlrec_toarray(AVLREC *arvore, int *tam){
     ITEMREC *array;
+
+    if (*arvore == NULL) {
+        (*tam) = 0;
+        return NULL;
+    }
+
     int tammax = (int) pow(2, (*arvore)->altura)+1;
     array = (ITEMREC*) malloc(sizeof(ITEMREC)*tammax);
     
