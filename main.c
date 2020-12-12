@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
                     avl_imprimir(AVLrejects);
                     array_recorrentes = avlrec_toarray(AVLrec, &tamanho_arr_recorrentes);
                     qsort(array_recorrentes, tamanho_arr_recorrentes, sizeof(ITEMREC), comparador_recorrentes);
-                    if (n_palavras_recorrentes < 0) {
+                    if (n_palavras_recorrentes <= 0) {
                         /*Para n menor que zero*/
                         printf("IMPOSSIVEL INFORMAR %d PALAVRAS MAIS FREQUENTES\n", n_palavras_recorrentes);
                         free(array_recorrentes);
