@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
                 while (strcmp(palavra, "#")) {
                     scanf("%s", palavra);
                 }
-                printf("DICIONÁRIO INEXISTENTE\n");
+                printf("DICIONARIO INEXISTENTE\n");
                 break;
             default:
                 flag = FALSE;
